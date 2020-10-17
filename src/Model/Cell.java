@@ -1,9 +1,9 @@
 package Model;
 
 public class Cell {
-    public int row;
-    public int col;
-    public Status status;
+    private final int row;
+    private final int col;
+    private Status status;
 
     public Cell(int row, int col, int numberOfRows, int numberOfCols, boolean carve) {
         this.row = row;
@@ -35,23 +35,23 @@ public class Cell {
     @Override
     public String toString() {
         String output = "";
-        output += "[";
+        output += "";
         if(status == Status.PATH){
-            output += " ";
+            output += "   ";
         }
         else if(status == Status.WALL){
-            output += "#";
+            output += "[#]";
         }
         else if(status == Status.START){
-            output += "S";
+            output += "[S]";
         }
         else if(status == Status.END){
-            output += "E";
+            output += "[E]";
         }
         else{
             output += "ERROR";
         }
-        output += "]";
+        output += "";
 
         return output;
     }

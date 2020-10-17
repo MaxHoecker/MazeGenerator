@@ -25,21 +25,28 @@ public class RecursiveSplitting implements MazeGenerator{
     //[#][#][#][#]
 
     private void divide(Maze maze){
-        if(maze == null || maze.numberOfRows < 4 || maze.getNumberOfColumns() < 4){
+        if(maze == null || (maze.getNumberOfRows() < 5 && maze.getNumberOfColumns() < 5)){
             return;
         }
+
         Random rand = new Random();
         int split = rand.nextInt(2);
+        if(maze.getNumberOfRows() < 5){
+            split = 1;
+        }
+        else if(maze.getNumberOfColumns() < 5){
+            split = 0;
+        }
 
         if(split == 0){
-            int splitIndex = rand.nextInt(maze.getNumberOfRows()-3)+2;
+            int splitIndex = rand.nextInt(maze.getNumberOfRows()-4)+2;
 
             buildWall(maze, true, splitIndex);
 
             recurse(maze, true, splitIndex);
         }
         else{
-            int splitIndex = rand.nextInt(maze.getNumberOfColumns()-3)+2;
+            int splitIndex = rand.nextInt(maze.getNumberOfColumns()-4)+2;
 
             buildWall(maze, false, splitIndex);
 
@@ -60,8 +67,8 @@ public class RecursiveSplitting implements MazeGenerator{
             cells = maze.getColumn(splitIndex);
         }
 
-        for (Cell cell : cells) {
-            cell.setStatus(Status.WALL);
+        for (int i = 1; i < cells.size() - 1; i++) {
+            cells.get(i).setStatus(Status.WALL);
         }
 
         int path = rand.nextInt(cells.size()-2)+1;
@@ -106,8 +113,8 @@ public class RecursiveSplitting implements MazeGenerator{
                 }
             }
 
-            divide(new Maze(left, maze.getNumberOfColumns()));
-            divide(new Maze(right, maze.getNumberOfColumns()));
+            divide(new Maze(left, maze.getNumberOfRows()));
+            divide(new Maze(right, maze.getNumberOfRows()));
         }
     }
 

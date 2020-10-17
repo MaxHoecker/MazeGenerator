@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Maze {
-    public ArrayList<Row> rows;
-    public int numberOfRows;
-    public HashMap<Cell, Cell> adjacencyList;
+    private ArrayList<Row> rows;
+    private int numberOfRows;
+    private HashMap<Cell, Cell> adjacencyList;
 
     public Maze(int numberOfRows, int numberOfColumns, boolean carve) {
         ArrayList<Row> rows = new ArrayList<>();
