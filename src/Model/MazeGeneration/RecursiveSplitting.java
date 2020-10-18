@@ -1,4 +1,9 @@
-package Model;
+package Model.MazeGeneration;
+
+import Model.Cell;
+import Model.Maze;
+import Model.Row;
+import Model.Status;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,17 +19,10 @@ public class RecursiveSplitting implements MazeGenerator{
         return maze;
     }
 
-    //division by two walls
-    //holes in walls
-    //continue sub-dividing
-    //completed
-
-    //[#][#][#][#]
-    //[#][#][#][#]
-    //[#][#][#][#]
-    //[#][#][#][#]
 
     private void divide(Maze maze){
+        System.out.println(maze);
+
         if(maze == null || (maze.getNumberOfRows() < 5 && maze.getNumberOfColumns() < 5)){
             return;
         }
@@ -37,16 +35,20 @@ public class RecursiveSplitting implements MazeGenerator{
         else if(maze.getNumberOfColumns() < 5){
             split = 0;
         }
+        else {
+            split = rand.nextInt(2);
+        }
+
 
         if(split == 0){
-            int splitIndex = rand.nextInt(maze.getNumberOfRows()-4)+2;
+            int splitIndex = getSplitIndex(maze, true, 0);
 
             buildWall(maze, true, splitIndex);
 
             recurse(maze, true, splitIndex);
         }
         else{
-            int splitIndex = rand.nextInt(maze.getNumberOfColumns()-4)+2;
+            int splitIndex = getSplitIndex(maze, false, 0);
 
             buildWall(maze, false, splitIndex);
 
@@ -72,6 +74,9 @@ public class RecursiveSplitting implements MazeGenerator{
         }
 
         int path = rand.nextInt(cells.size()-2)+1;
+        if(cells.size() % 2 == 1 && path == cells.size() / 2 && cells.size() > 3){
+            path -= 1;
+        }
         cells.get(path).setStatus(Status.PATH);
     }
 
@@ -116,6 +121,44 @@ public class RecursiveSplitting implements MazeGenerator{
             divide(new Maze(left, maze.getNumberOfRows()));
             divide(new Maze(right, maze.getNumberOfRows()));
         }
+    }
+
+    private int getSplitIndex(Maze maze,boolean isHorizontal, int bias){
+        int splitIndex = 0;
+        Random rand = new Random();
+
+        if(maze.getNumberOfRows() == 5 || maze.getNumberOfColumns() == 5){
+            return 2;
+        }
+        else{
+            if(isHorizontal){
+                splitIndex = rand.nextInt(maze.getNumberOfRows()-4-bias)+2;
+            }
+            else{
+                splitIndex = rand.nextInt(maze.getNumberOfColumns()-4-bias)+2;
+            }
+        }
+        ArrayList<Cell> cells;
+
+        if(isHorizontal){
+            cells = maze.getRow(splitIndex).getCells();
+        }
+        else {
+            cells = maze.getColumn(splitIndex);
+        }
+
+        if(cells.get(0).getStatus() != Status.WALL || cells.get(cells.size()-1).getStatus() != Status.WALL){
+            try{
+                return getSplitIndex(maze, isHorizontal, bias - 1);
+            }
+            catch(Exception e){
+                return getSplitIndex(maze, isHorizontal, bias + 1);
+            }
+        }
+        else{
+            return splitIndex;
+        }
+
     }
 
 }

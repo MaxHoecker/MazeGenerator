@@ -1,7 +1,7 @@
 package Controller;
 
-import Model.MazeGenerator;
-import Model.RecursiveSplitting;
+import Model.MazeGeneration.MazeGenerator;
+import Model.MazeGeneration.RecursiveSplitting;
 import View.MazeDisplay;
 
 import java.util.Scanner;
@@ -12,13 +12,13 @@ public class CommandHandler {
     public int numberOfRows;
     public int numberOfCols;
 
-    public static final int DIMENSIONS = 10;
+    public static final int DIMENSIONS = 30;
 
     public CommandHandler() {
         this.mazeDisplay = new MazeDisplay();
         this.mazeGenerator = new RecursiveSplitting();
-        this.numberOfRows = 10;
-        this.numberOfCols = 10;
+        this.numberOfRows = DIMENSIONS;
+        this.numberOfCols = DIMENSIONS;
     }
 
     public static void main(String[] args) {
